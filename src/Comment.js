@@ -22,6 +22,8 @@ const Comment = ({
   scoreValue,
   setTopLevelComments,
   setTarget,
+  setTargetCommentArray,
+  commentIdRef
 }) => {
   const [editValue, setEditValue] = useState(content);
   const [isReply, setIsReply] = useState(false);
@@ -30,10 +32,20 @@ const Comment = ({
   const [repl, setRepl] = useState(replies);
   const [score, setScore] = useState(scoreValue);
   const [isEdit, setIsEdit] = useState(false);
-  useEffect(() => {
-    console.log(topLevelComments);
-  }, [topLevelComments]);
+  const [replTarget,setReplTarget]=useState(null)
+  // useEffect(() => {
+  //   console.log(topLevelComments);
+  // }, [topLevelComments]);
 
+  // const handleReplDelete = (commentId) => {
+  //   console.log("clicked on:", commentId);
+  //   setRepl((comments) =>
+  //     comments.filter((com) => com.id !== commentId)
+  //   );
+  //   console.log(commentId);
+  //   setIsDelete(false);
+  //   //console.log(topLevelComments)
+  // };
   //const [replies,setReplies]=useState([])
   const handleReply = () => {
     setIsReply(true);
@@ -41,19 +53,18 @@ const Comment = ({
   };
 
   const handleEdit=(commentId,editValue)=>{
-    // let obj=topLevelComments.filter((com)=>com.id===commentId)
-    // console.log
-    // obj={...obj,content:editValue}
+    
    const obj= topLevelComments.filter((com)=>com.id===commentId).map((val)=>({...val,content:editValue}))
    setTopLevelComments((com)=>com.filter(val=>val.id!==commentId))
     setTopLevelComments((topCom)=>[...topCom,...obj])
     setIsEdit(false)
   }
-  const handleSendReply = (username, commentId) => {
+  const handleSendReply = () => {
+    commentIdRef.current+=1
     setRepl((prevRepl) => [
       ...prevRepl,
       {
-        id: commentId,
+        id: commentIdRef.current,
         score: 0,
         content: userInput,
         replyingTo: username,
@@ -99,13 +110,14 @@ const Comment = ({
             </div>
             {currentUser === username ? (
               <div>
-                <div className=" flex gap-3  items-center font-semibold  text-sm">
+                <div className=" flex gap-3 p-2 ml-2 items-center font-semibold  text-sm">
                   <div
                     className="flex gap-1  hover:opacity-40"
                     onClick={() => {
                       setIsDelete(true);
                       setTarget(commentId);
                       console.log(commentId);
+                      setTargetCommentArray({setFunc:setTopLevelComments})
                     }}
                   >
                     <img
@@ -140,16 +152,16 @@ const Comment = ({
             )}
           </div>
           {isEdit ? (
-            <div className="pl-1  mt-1">
+            <div className="p-2 flex flex-col gap-2 mt-1">
               <textarea
                 value={editValue}
                 onChange={(e) => setEditValue(e.target.value)}
-                className="w-full"
+                className="w-full rounded-md inline-block px-2 py-1 hover:border hover:border-black"
               />
-              <button onClick={()=>handleEdit(commentId,editValue)}>Update</button>
+              <button className="self-end bg-[#5457b6] px-3 py-2 rounded-md font-semibold text-xs text-white" onClick={()=>handleEdit(commentId,editValue)}>UPDATE</button>
             </div>
           ) : (
-            <div className="pl-1  mt-1">
+            <div className="p-2  mt-1">
               <p className="text-[#67727e] break-words">{content}</p>
             </div>
           )}
@@ -174,7 +186,7 @@ const Comment = ({
             />
             <button
               className="bg-[#5457b6] text-white rounded-md h-9 px-5  text-sm"
-              onClick={() => handleSendReply(username)}
+              onClick={handleSendReply}
             >
               REPLY
             </button>
@@ -197,6 +209,7 @@ const Comment = ({
   // setTarget={setTarget}
   //       />
         <Reply
+          repl={repl}
           setRepl={setRepl}
           profilePic={reply.user.image.png}
           username={reply.user.username}
@@ -207,6 +220,12 @@ const Comment = ({
           content={reply.content}
           scoreVal={reply.score}
           currentUser={currentUser}
+          isDelete={isDelete}
+          setIsDelete={setIsDelete}
+          setTarget={setTarget}
+          commentId={reply.id}
+          setTargetCommentArray={setTargetCommentArray}
+          commentIdRef={commentIdRef}
         />
       ))}
     </div>

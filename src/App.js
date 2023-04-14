@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 //import juliu from './assets/image-juliusomo.png'
 import Comment from "./Comment";
-
+import DeleteModal from "./DeleteModal";
 import initialData from "./data.json";
 function App() {
   //const [userInput,setUserInput]=useState("")
   const [target, setTarget] = useState(null);
+  const [targetCommentArray,setTargetCommentArray]=useState({})
   const [topLevelComments, setTopLevelComments] = useState([]);
   const commentId = useRef(null);
   const [userInput, setUserInput] = useState("");
@@ -33,15 +34,27 @@ function App() {
         ].id
       : data.comments[data.comments.length - 1].id;
   }, []);
-  const handleDelete = (commentId) => {
-    console.log("clicked on:", commentId);
-    setTopLevelComments((comments) =>
-      comments.filter((com) => com.id !== commentId)
-    );
-    console.log(commentId);
-    setIsDelete(false);
-    //console.log(topLevelComments)
-  };
+  // const handleDelete = (commentId,targetCommentArray) => {
+  //   console.log("clicked on:", commentId);
+  // //  if(targetCommentArray.name==="topLevelComments")
+  //   //{
+  //   setTopLevelComments((comments) =>
+  //     comments.filter((com) => com.id !== commentId)
+  //   );
+  // //}
+  //   // else if(targetCommentArray.name==="replyComments")
+  //   // {console.log(targetCommentArray.repl)
+  //   //   console.log("ya coming here")
+  //   //   targetCommentArray.setFunc((comments) =>
+  //   //   comments.filter((com) => com.id !== commentId)
+  //   //   //comments.map(val=>"hello")
+  //   //   )
+  //   //   console.log("afterDel:",targetCommentArray.repl)
+  //   // }
+  //   console.log(commentId);
+  //   setIsDelete(false);
+  //   //console.log(topLevelComments)
+  // };
   const handleSend = () => {
     commentId.current += 1;
     setTopLevelComments((prevCom) => [
@@ -70,7 +83,8 @@ function App() {
           : "h-screen flex justify-center items-center  bg-white"
       }
     >
-      {isDelete && (
+      <DeleteModal isDelete={isDelete} target={target} targetCommentArray={targetCommentArray}  setIsDelete={setIsDelete}/>
+      {/* {isDelete && (
         <div className="fixed flex z-30 flex-col w-[65%] sm:w-1/4 gap-3 p-3 bg-white rounded-md top-60 left-[22%] sm:left-[37.5%]">
           <h2 className="font-semibold ">Delete comment</h2>
           <p className="text-[#67727e] text-sm">
@@ -86,14 +100,14 @@ function App() {
             </button>
 
             <button
-              onClick={() => handleDelete(target)}
+              onClick={() => handleDelete(target,targetCommentArray)}
               className="bg-[#ed6468] text-white font-semibold text-xs py-2 px-4 rounded-md"
             >
               YES, DELETE
             </button>
           </div>
         </div>
-      )}
+      )} */}
       <div className=" w-full sm:w-2/5 h-[90%] relative">
         <div className={isDelete?" w-full  h-[95%] overflow-hidden p-5 relative":" w-full  h-[95%] overflow-auto p-5 relative"}>
           <div>
@@ -112,6 +126,8 @@ function App() {
                   setTopLevelComments={setTopLevelComments}
                   commentId={comment.id}
                   setTarget={setTarget}
+                  commentIdRef={commentId}
+                  setTargetCommentArray={setTargetCommentArray}
                 />
               );
             })}
@@ -130,19 +146,22 @@ function App() {
             className={
               isDelete
                 ? "w-[75%] bg-[rgb(0,0,0,0.01)] rounded-md inline-block p-2"
-                : "w-[75%]  rounded-md inline-block p-2"
+                : "w-[75%] hover:border hover:border-black rounded-md inline-block p-2"
             }
             placeholder="Add a comment..."
             disabled={isDelete ? true : false}
             value={userInput}
             onChange={(e) => setUserInput(e.target.value)}
           />
-          <button
-            className="bg-[#5457b6] text-white rounded-md h-9 px-5  text-sm"
+          <div>
+            <button
+            className="bg-[#5457b6] text-white rounded-md  px-4 hover:opacity-40 py-2 font-semibold text-xs"
             onClick={handleSend}
           >
             SEND
           </button>
+          </div>
+          
         </div>
         
       </div>
