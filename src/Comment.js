@@ -23,7 +23,7 @@ const Comment = ({
   setTopLevelComments,
   setTarget,
   setTargetCommentArray,
-  commentIdRef
+  commentIdRef,
 }) => {
   const [editValue, setEditValue] = useState(content);
   const [isReply, setIsReply] = useState(false);
@@ -32,35 +32,27 @@ const Comment = ({
   const [repl, setRepl] = useState(replies);
   const [score, setScore] = useState(scoreValue);
   const [isEdit, setIsEdit] = useState(false);
-  const [replTarget,setReplTarget]=useState(null)
-  // useEffect(() => {
-  //   console.log(topLevelComments);
-  // }, [topLevelComments]);
-
-  // const handleReplDelete = (commentId) => {
-  //   console.log("clicked on:", commentId);
-  //   setRepl((comments) =>
-  //     comments.filter((com) => com.id !== commentId)
-  //   );
-  //   console.log(commentId);
-  //   setIsDelete(false);
-  //   //console.log(topLevelComments)
-  // };
-  //const [replies,setReplies]=useState([])
+  const [replTarget, setReplTarget] = useState(null);
+  
+  useEffect(()=>{
+    setEditValue(content)
+  },[isDelete])
   const handleReply = () => {
     setIsReply(true);
     // setReplyingTo(username)
   };
 
-  const handleEdit=(commentId,editValue)=>{
-    
-   const obj= topLevelComments.filter((com)=>com.id===commentId).map((val)=>({...val,content:editValue}))
-   setTopLevelComments((com)=>com.filter(val=>val.id!==commentId))
-    setTopLevelComments((topCom)=>[...topCom,...obj])
-    setIsEdit(false)
-  }
+  const handleEdit = (commentId, editValue) => {
+    const obj = topLevelComments
+      .filter((com) => com.id === commentId)
+      .map((val) => ({ ...val, content: editValue }));
+    setTopLevelComments((com) => com.filter((val) => val.id !== commentId));
+    setTopLevelComments((topCom) => [...topCom, ...obj]);
+    setIsEdit(false);
+  };
   const handleSendReply = () => {
-    commentIdRef.current+=1
+    console.log("From reply:", commentIdRef.current + 1);
+    commentIdRef.current += 1;
     setRepl((prevRepl) => [
       ...prevRepl,
       {
@@ -81,7 +73,7 @@ const Comment = ({
     setUserInput("");
   };
   return (
-    <div className="flex flex-col mb-10 pt-8 pr-1 pl-8">
+    <div className="flex flex-col mb-10 pt-8 pr-1 pl-2 sm:pl-8">
       <div className="flex">
         <div className="flex text-[#5457b6] font-semibold items-center pr-3 gap-2 flex-col">
           <button onClick={() => setScore((score) => score + 1)}>
@@ -117,7 +109,7 @@ const Comment = ({
                       setIsDelete(true);
                       setTarget(commentId);
                       console.log(commentId);
-                      setTargetCommentArray({setFunc:setTopLevelComments})
+                      setTargetCommentArray({ setFunc: setTopLevelComments });
                     }}
                   >
                     <img
@@ -158,7 +150,12 @@ const Comment = ({
                 onChange={(e) => setEditValue(e.target.value)}
                 className="w-full rounded-md inline-block px-2 py-1 hover:border hover:border-black"
               />
-              <button className="self-end bg-[#5457b6] px-3 py-2 rounded-md font-semibold text-xs text-white" onClick={()=>handleEdit(commentId,editValue)}>UPDATE</button>
+              <button
+                className="self-end bg-[#5457b6] px-3 py-2 rounded-md font-semibold text-xs text-white"
+                onClick={() => handleEdit(commentId, editValue)}
+              >
+                UPDATE
+              </button>
             </div>
           ) : (
             <div className="p-2  mt-1">
@@ -194,20 +191,20 @@ const Comment = ({
         ) //culprit above
       }
       {repl.map((reply) => (
-  //       <Comment
-  //          commentId={reply.id}
-  // currentUser={currentUser}
-  // topLevelComments={topLevelComments}
-  // isDelete={isDelete}
-  // setIsDelete={setIsDelete}
-  // username={reply.user.username}
-  // profilePic={reply.user.image.png}
-  // content={reply.content}
-  // replies={[]}
-  // scoreValue={reply.score}
-  // setTopLevelComments={setTopLevelComments}
-  // setTarget={setTarget}
-  //       />
+        //       <Comment
+        //          commentId={reply.id}
+        // currentUser={currentUser}
+        // topLevelComments={topLevelComments}
+        // isDelete={isDelete}
+        // setIsDelete={setIsDelete}
+        // username={reply.user.username}
+        // profilePic={reply.user.image.png}
+        // content={reply.content}
+        // replies={[]}
+        // scoreValue={reply.score}
+        // setTopLevelComments={setTopLevelComments}
+        // setTarget={setTarget}
+        //       />
         <Reply
           repl={repl}
           setRepl={setRepl}

@@ -1,21 +1,23 @@
-import React from 'react'
+import React from "react";
 
-const DeleteModal = ({isDelete,target,setIsDelete,targetCommentArray}) => {
-     const handleDelete = (commentId) => {
+const DeleteModal = ({ isDelete, target, setIsDelete, targetCommentArray }) => {
+  const handleDelete = (commentId) => {
     console.log("clicked on:", commentId);
-  
+
     targetCommentArray.setFunc((comments) =>
-      comments.filter((com) => com.id !== commentId)
+      {let val=comments.filter((com) => com.id !== commentId)
+        console.log("Filterder del:",val)
+        return comments.filter((com) => com.id !== commentId)
+      }
     );
-  
-    console.log(commentId);
+
+    //console.log(commentId);
     setIsDelete(false);
     //console.log(topLevelComments)
   };
   return (
     <div>
-
-     {isDelete && (
+      {isDelete && (
         <div className="fixed flex z-30 flex-col w-[65%] sm:w-1/4 gap-3 p-3 bg-white rounded-md top-60 left-[22%] sm:left-[37.5%]">
           <h2 className="font-semibold ">Delete comment</h2>
           <p className="text-[#67727e] text-sm">
@@ -39,8 +41,8 @@ const DeleteModal = ({isDelete,target,setIsDelete,targetCommentArray}) => {
           </div>
         </div>
       )}
-      </div>
-  )
-}
+    </div>
+  );
+};
 
-export default DeleteModal
+export default DeleteModal;

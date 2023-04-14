@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import initialData from "./data.json";
 import replyIcon from "./assets/icon-reply.svg";
 import plusIcon from "./assets/icon-plus.svg";
@@ -19,7 +19,7 @@ const Reply = ({
   setTarget,
   commentId,
   setTargetCommentArray,
-  commentIdRef
+  commentIdRef,
 }) => {
   const [isReply, setIsReply] = useState(false);
   const [userInput, setUserInput] = useState("");
@@ -29,8 +29,10 @@ const Reply = ({
   const handleReply = () => {
     setIsReply(true);
   };
+  useEffect(()=>{
+    setEditValue(content)
+  },[isDelete])
   const handleEdit = (commentId, editValue) => {
-   
     const obj = repl
       .filter((com) => com.id === commentId)
       .map((val) => ({ ...val, content: editValue }));
@@ -39,12 +41,12 @@ const Reply = ({
     setIsEdit(false);
   };
   const handleSendReply = () => {
-    console.log("Inside handle send reply")
-    commentIdRef.current+=1
+    console.log("Inside handle send reply", (commentIdRef.current += 1));
+    commentIdRef.current += 1;
     setRepl((prevRepl) => [
       ...prevRepl,
       {
-        id:commentIdRef.current,
+        id: commentIdRef.current,
         score: 0,
         content: userInput,
         replyingTo: username,
@@ -56,12 +58,12 @@ const Reply = ({
         },
       },
     ]);
-    console.log("sendRepl commentId: ",commentId)
+    // console.log("sendRepl commentId: ",commentId)
     setIsReply(false);
     setUserInput("");
   };
   return (
-    <div className="pt-8 pl-8 pr-2 ml-2 border-l border-gray-200">
+    <div className="   pt-8 pl-1 sm:pl-8 pr-2 ml-2 border-l border-gray-200">
       <div className="flex">
         <div className="flex text-[#5457b6] font-semibold pr-3 flex-col">
           <button onClick={() => setScore((score) => score + 1)}>+</button>
@@ -73,11 +75,11 @@ const Reply = ({
           <div className="flex  justify-between">
             <div className="flex gap-3">
               <img
-                className="h-7"
+                className="h-7 self-center"
                 src={process.env.PUBLIC_URL + profilePic}
                 alt="profile pic"
               />
-              <p className="font-semibold">{username}</p>
+              <p className="font-semibold self-center">{username}</p>
               {currentUser === username ? (
                 <p className="px-2 rounded-sm self-center text-sm text-white bg-[#5457b6]">
                   you
@@ -92,7 +94,7 @@ const Reply = ({
                     onClick={() => {
                       setIsDelete(true);
                       setTarget(commentId);
-                      setTargetCommentArray({setFunc:setRepl})
+                      setTargetCommentArray({ setFunc: setRepl });
                       //console.log("clicked reply on:",commentId);
                     }}
                   >
@@ -123,13 +125,7 @@ const Reply = ({
             ) : (
               <div className=" text-[#5457b6] flex gap-1  items-center font-semibold hover:opacity-40  text-sm">
                 <img src={replyIcon} alt="replyIcon" />
-                <button
-                  onClick={
-                   handleReply
-                  }
-                >
-                  Reply
-                </button>
+                <button onClick={handleReply}>Reply</button>
               </div>
             )}
           </div>
@@ -150,25 +146,16 @@ const Reply = ({
           ) : (
             <div className="p-2  mt-1">
               <p className="text-[#67727e] break-words">
-              {
-                <span className="text-[#5457b6] font-semibold">
-                  {"@" + replyingTo}
-                </span>
-              }{" "}
-              {editValue}
-            </p>
+                {
+                  <span className="text-[#5457b6] font-semibold">
+                    {"@" + replyingTo}
+                  </span>
+                }{" "}
+                {content}
+              </p>
             </div>
           )}
-          {/* <div className="pl-1 mt-1">
-            <p className="text-[#67727e] break-words">
-              {
-                <span className="text-[#5457b6] font-semibold">
-                  {"@" + replyingTo}
-                </span>
-              }{" "}
-              {content}
-            </p>
-          </div> */}
+         
         </div>
       </div>
 
