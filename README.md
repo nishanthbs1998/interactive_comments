@@ -30,7 +30,7 @@ Users should be able to:
 
 ### Screenshot
 
-![Desktop-view](./screenshots/desktop-view.png "Desktop-view")
+![Desktop-view](./screenshots/desktop-view.png)
 ![New-comment](./screenshots/new-comment.png)
 ![](./screenshots/edit-comment.png)
 ![](./screenshots/delete-popup.png)
