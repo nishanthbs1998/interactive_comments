@@ -4,12 +4,11 @@ const DeleteModal = ({ isDelete, target, setIsDelete, targetCommentArray }) => {
   const handleDelete = (commentId) => {
     console.log("clicked on:", commentId);
 
-    targetCommentArray.setFunc((comments) =>
-      {let val=comments.filter((com) => com.id !== commentId)
-        console.log("Filterder del:",val)
-        return comments.filter((com) => com.id !== commentId)
-      }
-    );
+    targetCommentArray.setFunc((comments) => {
+      let val = comments.filter((com) => com.id !== commentId);
+      console.log("Filterder del:", val);
+      return comments.filter((com) => com.id !== commentId);
+    });
 
     //console.log(commentId);
     setIsDelete(false);
@@ -18,7 +17,7 @@ const DeleteModal = ({ isDelete, target, setIsDelete, targetCommentArray }) => {
   return (
     <div>
       {isDelete && (
-        <div className="fixed flex z-30 flex-col w-[65%] sm:w-1/4 gap-3 p-3 bg-white rounded-md top-60 left-[22%] sm:left-[37.5%]">
+        <div className="fixed font-Rubik flex z-30 flex-col w-[65%] sm:w-1/4 gap-3 p-3 bg-white rounded-md top-60 left-[22%] sm:left-[37.5%]">
           <h2 className="font-semibold ">Delete comment</h2>
           <p className="text-[#67727e] text-sm">
             Are you sure you want to delete this comment? This will remove the

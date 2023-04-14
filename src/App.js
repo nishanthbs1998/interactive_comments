@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from "react";
-//import juliu from './assets/image-juliusomo.png'
+
 import Comment from "./Comment";
 import DeleteModal from "./DeleteModal";
 import initialData from "./data.json";
 function App() {
-  //const [userInput,setUserInput]=useState("")
+
   const [target, setTarget] = useState(null);
-  const [targetCommentArray,setTargetCommentArray]=useState({})
+  const [targetCommentArray, setTargetCommentArray] = useState({});
   const [topLevelComments, setTopLevelComments] = useState([]);
   const commentId = useRef(null);
   const [userInput, setUserInput] = useState("");
@@ -34,7 +34,7 @@ function App() {
         ].id
       : data.comments[data.comments.length - 1].id;
   }, []);
- 
+
   const handleSend = () => {
     commentId.current += 1;
     setTopLevelComments((prevCom) => [
@@ -59,18 +59,30 @@ function App() {
     <div
       className={
         isDelete
-          ? "h-screen flex justify-center items-center  bg-[rgb(0,0,0,0.2)]"
-          : "h-screen flex justify-center items-center  bg-white"
+          ? "h-screen flex justify-center items-center font-Rubik bg-[rgb(0,0,0,0.2)]"
+          : "h-screen flex justify-center items-center font-Rubik  bg-white"
       }
     >
-      <DeleteModal isDelete={isDelete} target={target} targetCommentArray={targetCommentArray}  setIsDelete={setIsDelete}/>
-    
+      <DeleteModal
+        isDelete={isDelete}
+        target={target}
+        targetCommentArray={targetCommentArray}
+        setIsDelete={setIsDelete}
+      />
+
       <div className=" w-full sm:w-2/5 h-[90%] relative">
-        <div className={isDelete?" w-full  h-[95%] overflow-hidden p-5 relative":" w-full  h-[95%] overflow-auto p-5 relative"}>
+        <div
+          className={
+            isDelete
+              ? " w-full  h-[95%] overflow-hidden p-5 relative"
+              : " w-full  h-[95%] overflow-auto p-5 relative"
+          }
+        >
           <div>
             {topLevelComments.map((comment) => {
               return (
                 <Comment
+                  createdAt={comment.createdAt}
                   isDelete={isDelete}
                   setIsDelete={setIsDelete}
                   currentUser={data.currentUser.username}
@@ -112,15 +124,13 @@ function App() {
           />
           <div>
             <button
-            className="bg-[#5457b6] text-white rounded-md  px-4 hover:opacity-40 py-2 font-semibold text-xs"
-            onClick={handleSend}
-          >
-            SEND
-          </button>
+              className="bg-[#5457b6] text-white rounded-md  px-4 hover:opacity-40 py-2 font-semibold text-xs"
+              onClick={handleSend}
+            >
+              SEND
+            </button>
           </div>
-          
         </div>
-        
       </div>
     </div>
   );
